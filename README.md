@@ -8,7 +8,7 @@ An IMDB API for getting information on your favourite movies!
 ## Installing
 Install via [npm](https://npmjs.com)
 
-    $ npm install imdb
+    $ npm install --save imdb
 
 ## Running / Building
 To run the example:
@@ -21,13 +21,13 @@ To run the example:
 Provide the IMDB ID and go! Also see the `examples/` folder for inspiration!
 
 ```javascript
-var imdb = require('imdb');
+import imdb from 'imdb';
 
-imdb('tt3659388', function(err, data) {
-  if(err)
+imdb('tt3659388', (err, data) => {
+  if (err)
     console.log(err.stack);
 
-  if(data)
+  if (data)
     console.log(data);
 });
 ```
