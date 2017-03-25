@@ -1,10 +1,11 @@
-var request = require('request')
-var cheerio = require('cheerio')
-module.exports = function (id, cb) {
-  request('http://www.imdb.com/title/' + id + '/', function (error, response, body) {
+const request = require('request');
+const cheerio = require('cheerio');
+
+export default (id, cb) => {
+  request(`http://www.imdb.com/title/${id}/`, (error, response, body) => {
     if (!error && response.statusCode == 200) {
       body = body.replace(/(\r\n|\n|\r)/gm, '').replace(/ +(?= )/g, '')
-      $ = cheerio.load(body)
+      const $ = cheerio.load(body)
 
       var title = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > h1').text().replace(/\(\d+\)/g, '').trim()
       var year = $('#titleYear > a').text()
@@ -32,7 +33,7 @@ module.exports = function (id, cb) {
       }
 
       if ($('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div').text().split('|')[2] != null) {
-        var genre = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div').text().split('|')[2].split(',')
+        var genre = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div').text().trim().split('|')[2].split(',')
       } else {
         var genre = null // I need fix this! If you need this feature for unreleased movies, please create an issue and I'll make it my priority
       }
@@ -65,7 +66,7 @@ module.exports = function (id, cb) {
         director: director || 'N/A',
         metascore: metascore || 'N/A',
         writer: writer || 'N/A',
-        language: language || 'N/A'
+        language: language.split(', ') || 'N/A'
       })
     } else {
       cb(new Error('IMDB Failed to respond, or responded with error code'), null)

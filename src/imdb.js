@@ -1,8 +1,8 @@
-var movies = require('./movies');
-var actors = require('./actors');
-var inTheaters = require('./in_theaters');
+const movies = require('./movies');
+const actors = require('./actors');
+const inTheaters = require('./in_theaters');
 
-module.exports = function(id, cb) {
+export default (id, cb) => {
   if(id.match(/tt\d+/i)) {
     // it's a movie
     movies(id, function(err, data) {
@@ -14,6 +14,7 @@ module.exports = function(id, cb) {
       cb(err, data);
     });
   } else if(id.match(/in_theaters/gi)) {
+    // it's in theaters
     inTheaters(function(err, data) {
       cb(err, data);
     })

@@ -1,7 +1,5 @@
-imdb
+imdb ![npm](https://img.shields.io/npm/v/imdb.svg) ![downloads](https://img.shields.io/npm/dt/imdb.svg)
 ====
-![npm](https://img.shields.io/npm/v/imdb.svg)
-![downloads](https://img.shields.io/npm/dt/imdb.svg)
 
 An IMDB API for getting information on your favourite movies!
 
