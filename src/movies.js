@@ -4,54 +4,54 @@ const cheerio = require('cheerio');
 export default (id, cb) => {
   request(`http://www.imdb.com/title/${id}/`, (error, response, body) => {
     if (!error && response.statusCode == 200) {
-      body = body.replace(/(\r\n|\n|\r)/gm, '').replace(/ +(?= )/g, '')
-      const $ = cheerio.load(body)
+      body = body.replace(/(\r\n|\n|\r)/gm, '').replace(/ +(?= )/g, '');
+      const $ = cheerio.load(body);
 
-      var title = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > h1').text().replace(/\(\d+\)/g, '').trim()
-      var year = $('#titleYear > a').text()
-      var contentRating = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div > meta').attr('content')
-      var runtime = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div > time').text().trim()
-      var description = $('#title-overview-widget > div.plot_summary_wrapper > div.plot_summary > div.summary_text').text().trim()
-      var rating = $('#title-overview-widget > div.vital > div.title_block > div > div.ratings_wrapper > div.imdbRating > div.ratingValue > strong > span').text()
-      var poster = $('#title-overview-widget > div.vital > div.slate_wrapper > div.poster > a > img').attr('src')
-      var director = $('#title-overview-widget > div.plot_summary_wrapper > div.plot_summary > div:nth-child(2) > span > a > span').text()
-      var metascore = $('#title-overview-widget > div.plot_summary_wrapper > div.titleReviewBar > div:nth-child(1) > a > div > span').text()
-      var writer = $('#title-overview-widget > div.plot_summary_wrapper > div.plot_summary > div:nth-child(3) > span:nth-child(2) > a > span').text()
+      var title = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > h1').text().replace(/\(\d+\)/g, '').trim();
+      var year = $('#titleYear > a').text();
+      var contentRating = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div > meta').attr('content');
+      var runtime = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div > time').text().trim();
+      var description = $('#title-overview-widget > div.plot_summary_wrapper > div.plot_summary > div.summary_text').text().trim();
+      var rating = $('#title-overview-widget > div.vital > div.title_block > div > div.ratings_wrapper > div.imdbRating > div.ratingValue > strong > span').text();
+      var poster = $('#title-overview-widget > div.vital > div.slate_wrapper > div.poster > a > img').attr('src');
+      var director = $('#title-overview-widget > div.plot_summary_wrapper > div.plot_summary > div:nth-child(2) > span > a > span').text();
+      var metascore = $('#title-overview-widget > div.plot_summary_wrapper > div.titleReviewBar > div:nth-child(1) > a > div > span').text();
+      var writer = $('#title-overview-widget > div.plot_summary_wrapper > div.plot_summary > div:nth-child(3) > span:nth-child(2) > a > span').text();
       var languageArray = $('#titleDetails > div:nth-child(5) > a')
       var language = ''
 
       if (languageArray.length === 1) {
-        language = $(languageArray[0]).text()
+        language = $(languageArray[0]).text();
       } else {
         for (var i = 0; i < languageArray.length; i++) {
           if (i < languageArray.length - 1) {
-            language += $(languageArray[i]).text() + ', '
+            language += $(languageArray[i]).text() + ', ';
           } else {
-            language += $(languageArray[i]).text()
+            language += $(languageArray[i]).text();
           }
         }
       }
 
       if ($('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div').text().split('|')[2] != null) {
-        var genre = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div').text().trim().split('|')[2].split(',')
+        var genre = $('#title-overview-widget > div.vital > div.title_block > div > div.titleBar > div.title_wrapper > div').text().trim().split('|')[2].split(',');
       } else {
-        var genre = null // I need fix this! If you need this feature for unreleased movies, please create an issue and I'll make it my priority
+        var genre = null; // I need fix this! If you need this feature for unreleased movies, please create an issue and I'll make it my priority
       }
 
       if (description === '') {
-        description = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.plot_summary_wrapper > div.plot_summary.minPlotHeightWithPoster > div.summary_text').text().trim()
+        description = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.plot_summary_wrapper > div.plot_summary.minPlotHeightWithPoster > div.summary_text').text().trim();
       }
 
       if (poster === null) {
-        poster = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.poster > a > img').attr('src')
+        poster = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.poster > a > img').attr('src');
       }
 
       if (director === '') {
-        director = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.plot_summary_wrapper > div.plot_summary.minPlotHeightWithPoster > div:nth-child(2) > span > a > span').text()
+        director = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.plot_summary_wrapper > div.plot_summary.minPlotHeightWithPoster > div:nth-child(2) > span > a > span').text();
       }
 
       if (writer === '') {
-        writer = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.plot_summary_wrapper > div.plot_summary.minPlotHeightWithPoster > div:nth-child(3) > span:nth-child(2) > a > span').text()
+        writer = $('#title-overview-widget > div.minPosterWithPlotSummaryHeight > div.plot_summary_wrapper > div.plot_summary.minPlotHeightWithPoster > div:nth-child(3) > span:nth-child(2) > a > span').text();
       }
 
       cb(null, {
@@ -67,9 +67,9 @@ export default (id, cb) => {
         metascore: metascore || 'N/A',
         writer: writer || 'N/A',
         language: language.split(', ') || 'N/A'
-      })
+      });
     } else {
-      cb(new Error('IMDB Failed to respond, or responded with error code'), null)
+      cb(new Error('IMDB Failed to respond, or responded with error code'), null);
     }
   })
 }
